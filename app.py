@@ -257,7 +257,34 @@ st.markdown(
 """
 )
 
-st.subheader("5. GERD Trend Over Time")
+
+st.subheader("5. GERD Distribution by Year (Boxplot)")
+
+# Create boxplot
+fig, ax = plt.subplots(figsize=(10, 6))
+
+df.boxplot(column="gerd_usd", by="year", ax=ax)
+
+# Customize plot
+ax.set_title("GERD Distribution by Year")
+ax.set_xlabel("Year")
+ax.set_ylabel("GERD (USD)")
+
+# Remove default pandas title
+plt.suptitle("")
+
+st.pyplot(fig)
+
+st.markdown("""
+**Interpretation:**
+
+- This boxplot shows the distribution of GERD values for each year.
+- The median (center line) increases over time, indicating overall growth in R&D spending.
+- The wide spread and presence of outliers suggest large disparities between countries.
+- A small number of countries contribute extremely high GERD values compared to others.
+""")
+
+st.subheader("6. GERD Trend Over Time")
 trend_type = st.radio(
     "Choose trend measure",
     options=["Average GERD", "Total GERD"],
@@ -297,7 +324,7 @@ st.markdown(
 """
 )
 
-st.subheader("6. Country Ranking")
+st.subheader("7. Country Ranking")
 rank_df = (
     df[df["year"] == selected_bar_year]
     .sort_values("gerd_usd", ascending=False)
@@ -323,7 +350,7 @@ st.markdown(
 """
 )
 
-st.subheader("7. Selected Country Trends")
+st.subheader("8. Selected Country Trends")
 if selected_countries:
     selected_df = df[df["country"].isin(selected_countries)].copy()
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -348,7 +375,7 @@ if selected_countries:
 else:
     st.info("Select at least one country in the sidebar to display the country trend chart.")
 
-st.subheader("8. Growth Rate Analysis")
+st.subheader("9. Growth Rate Analysis")
 if selected_countries:
     selected_growth = growth_df[growth_df["country"].isin(selected_countries)].copy()
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -378,7 +405,7 @@ st.write("**Average growth rate by country**")
 st.dataframe(growth_summary, use_container_width=True)
 add_download_button(growth_summary, "Download growth summary as CSV", "gerd_growth_summary.csv")
 
-st.subheader("9. Suggested Insights for Team Discussion")
+st.subheader("10. Suggested Insights for Team Discussion")
 st.markdown(
     """
 1. **Data readiness**: The cleaned GERD file can be used as a solid base dataset if country-year duplicates remain at zero.
@@ -390,7 +417,7 @@ st.markdown(
 """
 )
 
-st.subheader("10. Streamlit Notes")
+st.subheader("11. Streamlit Notes")
 st.code(
     "streamlit run app.py",
     language="bash",
